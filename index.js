@@ -35,11 +35,11 @@ async function run() {
     const habitCollection = database.collection("habits");
 
     //get data
-    app.get("/habits", async (req, res) => {
-      const cursor = habitCollection.find();
-      const result = await cursor.toArray();
-      res.send(result);
-    });
+    // app.get("/habits", async (req, res) => {
+    //   const cursor = habitCollection.find();
+    //   const result = await cursor.toArray();
+    //   res.send(result);
+    // });
 
     //added habit
     app.post("/addHabit", async (req, res) => {
@@ -47,6 +47,36 @@ async function run() {
       const habit = req.body;
       console.log(habit);
       const result = await habitCollection.insertOne(habit);
+      res.send(result);
+    });
+
+    //my habits (email)
+    app.get("/habits", async (req, res) => {
+      const query = {};
+      //console.log("email", req.query.email);
+      if (req.query.email) {
+        query.creatorEmail = req.query.email;
+      }
+
+      const cursor = habitCollection.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    //delete
+
+    app.delete("/products/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await productsCollection.deleteOne(query);
+      res.send(result);
+    });
+
+    app.delete("/habits/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      console.log(query);
+      const result = await habitCollection.deleteOne(query);
       res.send(result);
     });
 
