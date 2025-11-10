@@ -80,6 +80,33 @@ async function run() {
       res.send(result);
     });
 
+    //update habit
+    // app.patch("/products/:id", async (req, res) => {
+    //   const id = req.params.id;
+    //   const updatedProduct = req.body;
+    //   const query = { _id: new ObjectId(id) };
+    //   const update = {
+    //     $set: {
+    //       name: updatedProduct.name,
+    //       price: updatedProduct.price,
+    //     },
+    //   };
+
+    //   const result = await productsCollection.updateOne(query, update);
+    //   res.send(result);
+    // });
+    app.patch("/habits/:id", async (req, res) => {
+      const id = req.params.id;
+      const updatedHabit = req.body;
+      console.log(id, updatedHabit);
+      const query = { _id: new ObjectId(id) };
+      const update = {
+        $set: { ...updatedHabit },
+      };
+      const result = await habitCollection.updateOne(query, update);
+      res.send(result);
+    });
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
