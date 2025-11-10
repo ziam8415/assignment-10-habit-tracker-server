@@ -41,6 +41,15 @@ async function run() {
       res.send(result);
     });
 
+    //added habit
+    app.post("/addHabit", async (req, res) => {
+      //console.log("headers in the post ", req.headers);
+      const habit = req.body;
+      console.log(habit);
+      const result = await habitCollection.insertOne(habit);
+      res.send(result);
+    });
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
