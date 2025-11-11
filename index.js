@@ -35,11 +35,44 @@ async function run() {
     const habitCollection = database.collection("habits");
 
     //get data
-    // app.get("/habits", async (req, res) => {
-    //   const cursor = habitCollection.find();
-    //   const result = await cursor.toArray();
-    //   res.send(result);
-    // });
+
+    app.get("/allHabits", async (req, res) => {
+      const cursor = habitCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    // get category base data
+
+    app.get("/allHabits/:category", async (req, res) => {
+      const query = {};
+      console.log("category", req.params.category);
+      if (req.params.category) {
+        query.category = req.params.category;
+      }
+
+      const cursor = habitCollection.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    //get id base
+    app.get("/habit/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await habitCollection.findOne(query);
+      res.send(result);
+    });
+
+    // search
+
+    app.get("/search", async (req, res) => {
+      const searchText = req.query.search;
+      const result = await habitCollection
+        .find({ title: { $regex: searchText, $options: "i" } })
+        .toArray();
+      res.send(result);
+    });
 
     //added habit
     app.post("/addHabit", async (req, res) => {
@@ -65,13 +98,6 @@ async function run() {
 
     //delete
 
-    app.delete("/products/:id", async (req, res) => {
-      const id = req.params.id;
-      const query = { _id: new ObjectId(id) };
-      const result = await productsCollection.deleteOne(query);
-      res.send(result);
-    });
-
     app.delete("/habits/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
@@ -81,20 +107,7 @@ async function run() {
     });
 
     //update habit
-    // app.patch("/products/:id", async (req, res) => {
-    //   const id = req.params.id;
-    //   const updatedProduct = req.body;
-    //   const query = { _id: new ObjectId(id) };
-    //   const update = {
-    //     $set: {
-    //       name: updatedProduct.name,
-    //       price: updatedProduct.price,
-    //     },
-    //   };
 
-    //   const result = await productsCollection.updateOne(query, update);
-    //   res.send(result);
-    // });
     app.patch("/habits/:id", async (req, res) => {
       const id = req.params.id;
       const updatedHabit = req.body;
