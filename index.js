@@ -74,6 +74,13 @@ async function run() {
       res.send(result);
     });
 
+    //get 6 newest data
+    app.get("/newestHabits", async (req, res) => {
+      const cursor = habitCollection.find().sort({ time: -1 }).limit(6);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
     //added habit
     app.post("/addHabit", async (req, res) => {
       //console.log("headers in the post ", req.headers);
