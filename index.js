@@ -26,10 +26,7 @@ const verifyFireBaseToken = async (req, res, next) => {
   }
 };
 
-//simpleDbUser
-//CQDl671xKw94KCzI
-const uri =
-  "mongodb+srv://simpleDbUsers:CQDl671xKw94KCzI@simple.v1mki5f.mongodb.net/?appName=simple";
+const uri = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@simple.v1mki5f.mongodb.net/?appName=simple`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
